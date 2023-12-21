@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "My Awesome Project",
   description: "blog",
+  srcDir: './docs',
   outDir: './dist',
   assetsDir: './assets',
   themeConfig: {
