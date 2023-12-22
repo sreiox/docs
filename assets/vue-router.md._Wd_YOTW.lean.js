@@ -1,1 +1,0 @@
-import{_ as s,o as i,c as a,R as n}from"./chunks/framework.vB1haF5z.js";const y=JSON.parse('{"title":"vue-router","description":"","frontmatter":{},"headers":[],"relativePath":"vue-router.md","filePath":"vue-router.md"}'),h={name:"vue-router.md"},l=n("",19),t=[l];function p(e,k,r,E,d,o){return i(),a("div",null,t)}const c=s(h,[["render",p]]);export{y as __pageData,c as default};
