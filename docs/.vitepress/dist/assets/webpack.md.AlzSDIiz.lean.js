@@ -1,0 +1,1 @@
+import{_ as e,o as i,c as s,R as a}from"./chunks/framework.QII8IPJd.js";const u=JSON.parse('{"title":"Webpack","description":"","frontmatter":{},"headers":[],"relativePath":"webpack.md","filePath":"webpack.md"}'),l={name:"webpack.md"},d=a("",87),o=[d];function c(n,p,h,t,k,r){return i(),s("div",null,o)}const g=e(l,[["render",c]]);export{u as __pageData,g as default};

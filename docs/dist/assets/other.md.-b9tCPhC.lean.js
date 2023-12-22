@@ -1,1 +1,0 @@
-import{_ as e,o,c,R as a}from"./chunks/framework.vB1haF5z.js";const d="/assets/17.Twb5PbaW.webp",b=JSON.parse('{"title":"项目相关题","description":"","frontmatter":{},"headers":[],"relativePath":"other.md","filePath":"other.md"}'),t={name:"other.md"},r=a("",28),i=[r];function l(n,h,s,p,m,u){return o(),c("div",null,i)}const f=e(t,[["render",l]]);export{b as __pageData,f as default};
