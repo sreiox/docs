@@ -1,0 +1,1 @@
+import{_ as s,o as i,c as a,R as n}from"./chunks/framework.heP8kjby.js";const c=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"array-flatten.md","filePath":"array-flatten.md"}'),t={name:"array-flatten.md"},l=n("",1),h=[l];function p(k,e,E,r,d,g){return i(),a("div",null,h)}const o=s(t,[["render",p]]);export{c as __pageData,o as default};
