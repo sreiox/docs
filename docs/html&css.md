@@ -72,7 +72,7 @@
   align-self: center; /* 垂直居中 */
 }
 ```
-- 父元素display:table-cell;vertical-align:center。里面的子元素就会实现水平垂直居中，不需要知道子元素的宽高
+- 父元素display:table-cell;vertical-align:middle。里面的子元素就会实现水平垂直居中，不需要知道子元素的宽高
 ```css
 /* HTML */
 <div class='father'>

@@ -164,7 +164,7 @@ str.padEnd(13, 'x') //'woshistringxx'
 
 ```
 区别：
-substr第二个参数是截取长度，substring是endInde
+substr第二个参数是截取长度，substring是endIndex
 
 ## 4. 闭包和作用域
 
@@ -671,5 +671,335 @@ function startCountdown(targetTime) {
 const targetTime = Date.now() + 10000;
 startCountdown(targetTime);
 
+```
+
+## 16. [weakMap()和map的区别](https://juejin.cn/post/6844903837707272199)
+
+### Map
+
+#### Map代码示例
+
+`Map`的键和值可以是`任何数据类型`，键值对按照`插入顺序排列`，如果插入重复的键值，后面的键值会覆盖前者，下段代码是个简单示例，演示了Map的一些用法：
+
+```js
+let map = new Map();
+let o = {n: 1};
+map.set(o, "A"); //add
+map.set("2", 9);
+console.log(map.has("2")); //check if key exists
+console.log(map.get(o)); //retrieve value associated with key
+console.log(...map);
+console.log(map);
+map.delete("2"); //delete key and associated value
+map.clear(); //delete everything
+//create a map from iterable object
+let map_1 = new Map([[1, 2], [4, 5]]);
+console.log(map_1.size); //number of keys
+```
+
+上述代码将会输出
+
+```js
+true
+A
+[ { n: 1 }, 'A' ] [ '2', 9 ]
+Map { { n: 1 } => 'A', '2' => 9 }
+2
+```
+
+从上述代码中，我们可以看出使用`new Map()`语法进行声明，`map键`的类型可以使用`任意对象`作为键（字符串，object类型,functions），我们直接二维数组键值对的形传入到构建函数中，第一项为键，后一项为值。
+
+```js
+const map=new Map([['foo',1],['foo',2]])
+console.log(map);
+console.log(map.get('foo'))
+```
+
+上述代码将会输出：
+
+```js
+Map { 'foo' => 2 }
+2
+```
+
+上述代码我们可以看出，如果`存在相同的键`，则会按照`FIFO（First in First Out,先进先出）`原则，后面的键值信息会`覆盖`前面的键值信息。
+
+#### Map常用方法示例
+
+| 操作方法 | 内容描述 |
+| ------ | ------ |
+| `map.set(key,value)` | 添加键值对到映射中 |
+| `map.get(key) `| 获取映射中某一个键的对应值 |
+| `map.delete(key)` | 将某一键值对移除映射 |
+| `map.clear()` | 清空映射中所有键值对 |
+| `map.entries()` | 返回一个以二元数组（键值对）作为元素的数组 |
+| `map.has(key)` | 检查映射中是否包含某一键值对 |
+| `map.keys()` | 返回一个当前映射中所有键作为元素的可迭代对象 |
+| `map.values()` | 返回一个当前映射中所有值作为元素的可迭代对象 |
+| `map.size` | 映射中键值对的数量 |
+
+##### 增删键值对与清空MAP
+
+```js
+let user={name:"Aaron",id:1234};
+let userHobbyMap=new Map();
+userHobbyMap.set(user,['Ice fishing','Family Outting']);//添加键值对
+console.log(userHobbyMap);
+userHobbyMap.delete(user);//删除键值对
+userHobbyMap.clear(); //清空键值对
+console.log(userHobbyMap);
+```
+
+上述代码将会输出
+
+```js
+Map { { name: 'Aaron', id: 1234 } => [ 'Ice fishing', 'Family Outting' ] }
+Map {}
+```
+
+##### 获取键值对
+
+与Set集合对象不一样，集合对象的元素没有元素位置的标识，故没有办法获取集合某元素，但是映射对象由键值对组成，所以可以利用键来获取对应的值。
+
+```js
+const map=new Map();
+map.set('foo', 'bar');
+console.log(map.get('foo')); //output bar
+```
+
+##### 检查映射对象中是否存在某键
+
+```js
+const map=new Map([['foo',1]])
+console.log(map.has('foo'));//output true
+console.log(map.has('bar'));//output false
+```
+
+##### 遍历映射中的键值对
+
+映射对象在设计上同样也是一种`可迭代的对象`，可以通过`for-of`循环对其遍历，同时也可以使用f`oreach`进行遍历。
+映射对象中带有`entries()`方法，用于返回包含所有键值对的可迭代的`二元数组对象`，而for-of和foreach便是先利用entries()方法先将映射对象转换成一个类数组对象，然年再进行迭代。
+
+```js
+const map=new Map([['foo',1],['bar',2]]);
+console.log(Array.from(map.entries()));
+//output
+//[ [ 'foo', 1 ], [ 'bar', 2 ] ]
+for(const [key,value] of map){
+    console.log(`${key}:${value}`);
+}
+//output
+//foo:1
+//bar:2
+map.forEach((value,key,map)=>
+  console.log(`${key}:${value}`))
+//output
+//foo:1
+//bar:2
+```
+
+#### Map与Object的区别
+
+| 对比项 | 映射对象Map | Object对象 |
+| ----- | ---------- | --------- |
+| 存储键值对 | ✔️ |  ✔️ | 
+| 遍历所有的键值对 |  ✔️ |  ✔️ | 
+| 检查是否包含指定的键值对 | ✔️ |  ✔️ | 
+| 使用字符串作为键 | ✔️ |  ✔️ |
+| 使用Symbol作为键 | ✔️ | ✔️ |
+| 使用任意对象作为键 | ✔️ | ✔️ |
+| 可以很方便的得知键值对的数量 | ✔️ | ✔️ |
+
+从中我们可以看出`Map对象可以使用任何对象作为键`，这就解决了我们实际应用中一个很大的痛点，比如现在一个DOM对象作为键时，Object就不是那么好用了。
+
+### WeakMap
+
+与`集合类型（Set）`一样，映射类型也有一个Weak版本的`WeakMap`。WeakMap和WeakSet很相似，只不过`WeakMap的键会检查变量的引用`，`只要其中任意一个引用被释放，该键值对就会被删除`。
+
+以下三点是Map和WeakMap的主要区别： 
+1. `Map对象`的键可以是`任何类型`，但`WeakMap对象`中的键只能是`对象引用` 
+2. `WeakMap不能包含无引用的对象，否则会被自动清除出集合（垃圾回收机制）`。 
+3. `WeakMap对象`是`不可枚举`的，`无法获取大小`。
+
+下段代码示例验证了WeakMap的以上特性:
+
+```js
+let weakmap = new WeakMap();
+(function(){ 
+  let o = {n: 1}; 
+  weakmap.set(o, "A");
+})();  // here 'o' key is garbage collected
+let s = {m: 1};
+weakmap.set(s, "B");
+console.log(weakmap.get(s));
+console.log(...weakmap); // exception thrown
+weakmap.delete(s);
+weakmap.clear(); // Exception, no such function
+let weakmap_1 = new WeakMap([[{}, 2], [{}, 5]]); //this works
+console.log(weakmap_1.size); //undefined”
+```
+
+```js
+const weakmap=new WeakMap();
+let keyObject={id:1};
+const valObject={score:100};
+weakmap.set(keyObject, valObject);
+console.log(weakmap.get(keyObject));
+//output { score: 100 }
+keyObject=null;
+console.log(weakmap.has(keyObject));
+//output false
+```
+
+## 17. weakSet()和Set的区别
+
+在开发过程中，我们会经常使用到数组`Array`这种引用类型的数据结构，并十分清楚数组是种`有序的集合`，并且每个元素都可以使用数字下标的形式获取。但是在一些业务场景中，我们并不需要集合维护一个有序的状态，甚至有些场景需要无序集合，因此ES6里加入了`无序集合Set和其的Weak版本WeakSet`。
+
+### Set
+
+#### Set代码示例
+
+Set需要使用新语法new Set()声明，代码如下:
+
+```js
+let set = new Set("Hello!!!");
+set.add(12); //add 12
+console.log(set.has("!")); //check if value exists
+console.log(set.size);
+set.delete(12); //delete 12
+console.log(...set);
+set.clear(); //delete all values”
+//output
+//true
+//6
+//H e l o !
+```
+这段代码我们向`Set集合`里添加了一个`字符串和数字`，`字符串在Set集合里会被拆分成字符`进行存储，由于`Set集合去重`的特点，l和!重复将会被去重（ Set { 'h', 'e', 'l', 'o' ,'!'}），使用`add`方法添加了12到Set集合里，因此集合的大小是6。
+
+#### Set与Array的区别
+
+| 对比项 | Array | Set |
+| ----- | ------ | ---- |
+| 元素序列 | 有序 | 无序 | 
+| 元素可重复性 | 可重复 | 不可重复 |
+
+#### Set常用方法
+
+| 方法 | 介绍 |
+| ---- | ---- |
+| `set.add(value)` | 添加元素到集合内 |
+| `set.delete(value)` | 删除元素的指定元素 | 
+| `set.clear()` | 清空集合内元素 |
+| `set.forEach(callbackFn,[,context])` | 遍历集合内所有元素，并作为CallbackFn的参数进行调用 |
+| `set.has(value)` | 	检查集合内是否含有某元素 |
+
+##### 添加删除清空
+
+```js
+const set=new Set();
+set
+ .add(1)
+ .add(2)
+ .add(3)
+ .add(3);//不起作用，因为3已经在集合中
+console.log(set);//output Set { 1, 2, 3 }
+
+//删除元素
+set.delete(2);
+console.log(set);//output Set {1,3}
+
+//清空集合
+set.clear();
+console.log(set); //output Set{}
+```
+##### 检查元素
+
+因为`Set集合里没有排序`的概念，因此我们`无法使用Array的IndexOf的方法判断是否大于0来检验是否含有某元素`，ES6里使用了更简洁、更易懂的方法来检验是否含有某元素。
+
+```js
+const set=new Set([1,2,3,4]);
+set.has(2) //output true;
+set.has(5) //output false;
+```
+
+##### 遍历元素
+
+集合对象自身定义了forEach方法，跟数组类型的foreach一样,示例代码如下：
+
+```js
+const set=new Set([1,2,3,4]);
+set.forEach(item=>{
+  console.log(item);
+})
+//output
+//1
+//2
+//3
+//4
+```
+
+### WeakSet
+
+#### WeakSet介绍
+
+`JavaScript垃圾回收是一种内存管理技术`。在这种技术中，`不再被引用的对象会被自动删除，而与其相关的资源也会被一同回收`。Set中对象的引用都是强类型化的，并不会允许垃圾回收。这样一来，如果Set中引用了不再需要的大型对象，如已经从DOM树中删除的DOM元素，那么其回收代价是昂贵的。
+
+为了解决这个问题，ES6还引入了`WeakSet的弱集合`。这些集合之所以是“弱的”，是因为它们`允许从内存中清除不再需要的被这些集合所引用的对象`。
+
+首先让我们了解下WeakSet与Set的不同，以下三点是WeakSet与Set不一样的地方：
+
+1. `Set可以存储值类型和对象引用类型，而WeakSet只能存储对象引用类型，否则会抛出TypeError`。
+2. `WeakSet不能包含无引用的对象，否则会被自动清除出集合（垃圾回收机制）`。
+3. `WeakSet对象是不可枚举的，也就是说无法获取大小，也无法获取其中包含的元素。`
+
+如下段的代码验证了上述特性：
+
+```js
+let weakset = new WeakSet();
+(function(){ 
+   let a = {}; 
+   weakset.add(1); //TypeError: Invalid value used in weak set
+   weakset.add(a);
+})();  //here 'a' is garbage collected from weakset
+console.log()
+console.log(weakset.size); //output "undefined"
+console.log(...weakset); //Exception is thrown
+weakset.clear(); //Exception, no such function
+
+```
+
+```js
+const weakset=new WeakSet();
+let foo={bar:1};
+weakset.add(foo);
+console.log(weakset.has(foo)); //output true
+foo=null;
+console.log(weakset.has(foo)); //output false
+
+```
+
+
+
+## 18. 多维数组平铺几种方法
+
+①
+```javascript
+<script>
+
+let arr = [1, [2, [3, 4, 5], 6]];
+function flatten(arr, crr) {
+    //arr.flat(10)
+    let brr = crr || []
+    for(let i = 0; i < arr.length; i++){
+        if(arr[i] instanceof Array){
+            brr.concat(...flatten(arr[i], brr))
+        }else{
+            brr.push(arr[i])
+        }
+    }
+    return brr
+}
+console.log(flatten(arr, []));  //  [1, 2, 3, 4, 5, 6]
+</script>
 ```
 
