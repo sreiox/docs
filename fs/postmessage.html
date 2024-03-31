@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="./test.js"></script>
+    
+    <!-- HTML -->
+<div class="grandfather">
+    <div class="father">
+      <div class="son">son</div>
+    </div>
+  </div>
+  <script>
+    window.onload = function(){
+  // 接收来自父页面的消息
+  window.addEventListener('message', function(event) {
+    // event.data 包含来自父页面的消息内容
+    // var style = event.data.style;
+    console.log(event.data)
+    console.log(document.querySelector('.son'))
+    document.querySelector('.son').style.background = event.data
+    // 设置 iframe 内部元素的样式
+    // var iframeContentElement = document.getElementsByClassName('.logo')[0];
+    // iframeContentElement.style.color = style.color;
+    // iframeContentElement.style.fontSize = style.fontSize;
+  }, false);
+    }
+  
+  </script>
+  <style>
+    .grandfather {
+      width: 300px;
+      height: 300px;
+      border: 3px solid red;
+      writing-mode: vertical-lr;
+      text-align: center;
+    }
+    .father {
+      writing-mode: horizontal-tb;
+      display: inline-block;
+      width: 100%;
+    }
+    .son {
+      background-color: blue;
+      width: 100px;
+      height: 100px;
+      display: inline-block;
+    }
+  </style>
+  
+</body>
+</html>

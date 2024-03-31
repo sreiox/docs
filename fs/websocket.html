@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+</body>
+<script>
+     const exampleSocket = new WebSocket(
+        "ws://localhost:3030"
+    );
+    console.log(exampleSocket)
+    exampleSocket.onopen = function(){
+        console.log('open')
+    }
+    exampleSocket.onmessage = function(e){
+        console.log('from server: >>', e.data)
+    }
+    exampleSocket.onerror = function(){
+        console.log('error')
+    }
+    exampleSocket.onclose = function(){
+        console.log('close')
+    }
+</script>
+</html>

@@ -1,3 +1,6 @@
+---
+outline: deep
+---
 # Html5和CSS3
 
 ## 1. 常见的水平垂直居中实现方案
@@ -209,12 +212,177 @@ BFC渲染规则：
 
     ![浮动](./assets/img/11.webp)
 
+## 清除浮动方法及原理
+
+为什么要清除浮动：父元素因为子级元素浮动引起的内部高度为0的问题。
+
+清除浮动常用的四种方式：
+
+- 父级div定义height
+- 额外标签法：在有浮动的父级元素的末尾插入了一个没有内容的块级元素div 并添加样式clear:both。
+- 利用伪元素：父级div定义 伪类:after，我们可以写一个.clearfix 工具样式，当需要清除浮动时，就为其加上这个类 .clearfix:after { display: block; clear :both; content: '';}。
+- 父级添加overflow属性：包含浮动元素的父标签添加样式overflow为hidden或auto，通过触发BFC方式，实现清除浮动
+
+## CSS 中的 vertical-align 有哪些值？它在什么情况下才能生效？
+
+vertical-align属性值：
+- 线类：baseline、top、middle、bottom
+- 文本类：text-top、text-bottom
+- 上标下标类：sub、super
+- 数值百分比类：20px、2em、20%等（对于基线往上或往下偏移）
+
+> 负值相对于基线往下偏移，正值往上偏移，事实上vertical-align:base-line等同于vertical-align:0。这个负值真的是 CSS 神器！
+
+vertical-align生效前提：
+- 内联元素span、strong、em、img、button、input等
+- display值为inline、inline-block、inline-table或table-cell的元素
+- 需要注意浮动和绝对定位会让元素块状化，因此此元素绝对不会生效
+
+## 淘宝商品添加到购物车的动画
+
+贝塞尔曲线
+
 ## 3. flex:1; 是哪些属性的缩写，对应的属性代表什么含义
 
 `flex: 1`;在浏览器中查看分别是`flex-grow`（设置了对应元素的增长系数）、`flex-shrink`(指定了对应元素的收缩规则，只有在所有元素的默认宽度之和大于容器宽度时才会触发)、`flex-basis`（指定了对应元素在主轴上的大小）
 
 ![浮动](./assets/img/12.webp)
 
+## 说一下flex
+
+是网页布局（layout）是 CSS 样式应用。布局的传统解决方案，基于盒状模型，依赖 display 属性 + position属性 + float属性。它对于那些特殊布局非常不方便，比如，垂直居中就不容易实现，用的css代码行数就多了。2009年，W3C 提出了一种新的方案----Flex 布局，可以简便又响应式地实现各种页面布局。目前，它已经得到了所有浏览器的支持，这意味着，现在就能很安全地使用这项功能。
+
+Flex 是 Flexible Box 的缩写，意为"弹性布局"，任何一个容器都可以指定为 Flex 布局。Webkit 内核的浏览器，必须加上-webkit前缀。
+
+> 注意，设为 Flex 布局以后，子元素的`float`、`clear`和`vertical-align`属性将失效。
+
+采用 Flex 布局的元素，称为 Flex 容器（flex container），简称"容器"。它的所有子元素自动成为容器成员，称为 Flex 项目（`flex item`），简称"项目"。
+
+容器默认存在两根轴：`水平的主轴`（main axis）和`垂直的交叉轴`（cross axis）。主轴的开始位置（与边框的交叉点）叫做main start，结束位置叫做main end；交叉轴的开始位置叫做cross start，结束位置叫做cross end。
+
+项目默认沿主轴排列。单个项目占据的主轴空间叫做main size，占据的交叉轴空间叫做cross size。
+
+以下6个属性设置在容器上。
+
+- `flex-direction`: 属性决定主轴的方向（即项目的排列方向）。`column`、`column-reverse`、`row`、`row-reverse`
+- `flex-wrap`: 默认情况下，项目都排在一条线（又称"轴线"）上。flex-wrap属性定义，如果一条轴线排不下，如何换行。nowrap、wrap、reverse-wrap
+- `flex-flow`: 默认值为row nowrap。简写形式：flex-direction、flex-wrap
+- `justify-content`: 属性定义了项目在主轴上的对齐方式。flex-start、flex-end、center、space-between、space-around
+- `align-items`: 属性定义项目在交叉轴上如何对齐。flex-start、flex-end、center、baseline、stretch
+- `align-content`: 属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用。flex-start、flex-end、center、space-between、space-around、stretch
+
+以下6个属性设置在项目上。
+
+- `order`：属性定义项目的排列顺序。数值越小，排列越靠前，默认为0。
+  ```CSS
+  .item {
+      order: <integer>;
+    }
+  ```
+- `flex-grow`:属性定义项目的放大比例，默认为0，按比例计算占据空间。默认为0
+- `flex-shrink`：属性定义了项目的缩小比例。默认1
+- `flex-basis`
+- [`flex`](/flex):flex属性是flex-grow, flex-shrink 和 flex-basis的简写，默认值为0 1 auto。后两个属性可选。
+  - flex:1
+  - flex:auto
+  - flex: 0
+  - flex:none
+- `align-self`: 属性允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性。默认值为auto，表示继承父元素的align-items属性，如果没有父元素，则等同于stretch。auto | flex-start | flex-end | center | baseline | stretch;
+
+## 伪类和伪元素
+
+### 为什么引入?
+  css引入伪类和伪元素概念是为了格式化文档树以外的信息。伪类和伪元素是用来`修饰不在文档树中的部分`。
+### 伪类
+  伪类 用于当元素处于某个状态时，为其添加对应的样式，这个状态是根据用户行为而动态变化的。比如说，用户悬停在指定的元素时，我们可以通:hover来描述这个元素的状态。虽然它和普通的css类类似，可以为已有的元素添加样式，但是它只有处于dom树无法描述的状态下才能为元素添加样式，所以将其称为伪类。
+  ![tupian](./assets/img/43.webp)
+### 伪元素
+  用于创建不在文档树中的元素，并为其添加样式，比如说，我们可以通过：before来在一个元素前添加一些文本，并为这些文本添加样式。虽然用户可以看到这些文本，但是这些文本实际上不在文档树中。
+  ![tupian](./assets/img/44.webp)
+  >CSS3 规范中的要求使用双冒号 (::) 表示伪元素，以此来区分伪元素和伪类，比如::before 和::after 等伪元素使用双冒号 (::)，:hover 和:active 等伪类使用单冒号 (:)。虽然 CSS3 标准要求伪元素使用双冒号的写法，但也依然支持单冒号的写法。
+
+## 实现固定宽高比(width: height = 4: 3 )的div，怎么设置
+
+利用css中 padding百分比的计算方法：padding设置为百分比，是以元素的宽度乘以100%从而得到的padding值的。
+
+在div的width为固定的情况下，设置height为0，使内容自然溢出，再通过设置padding-bottom使元素有一定高度。
+```css
+    width: 100%;
+    height: 0;
+    padding-top: 50%;
+    background: red;
+```
+利用将padding-top或padding-bottom设置成百分比，来实现高度满足宽度的某个比例。因为，当margin/padding取形式为百分比的值时，无论是left/right，还是top/bottom，都是以父元素的width为参照物的！
+
+## CSS选择器
+
+- 通用选择器(*)
+- 标签选择器（div）
+- class选择器(.wrap)
+- id选择器（#wrap）
+- 属性选择器(E[att], E[att=val], E[att~=val])
+  - E[att]：匹配所有具有att属性的E元素，不考虑它的值
+  - E[att=val]：匹配所有att属性等于"val"的E元素
+  - E[att~=val]：匹配所有att属性具有多个空格分隔的值、其中一个值等于"val"的E元素
+- 相邻选择器(h1 + p)
+- 子选择器（ul > li）：只匹配一个元素的直接子元素
+- 后代选择器（li a）：所有后代匹配的子元素
+- 伪类选择器
+  - E:first-child：匹配父元素的第一个子元素
+  - E:link 匹配所有未被点击的链接
+  - E:focus 匹配获得当前焦点的E元素
+  - E:not(s) 反选伪类，匹配不符合当前选择器的任何元素
+
+选择器的优先级（就近原则）：!important > [ id > class > tag ]
+
+## display: none和 visibility:hidden的区别
+
+- 是否占据空间: display: none 不占据空间;visibility:hidden 占据空间
+- 是否渲染: display:none，会触发reflow（回流），进行渲染。visibility:hidden，只会触发repaint（重绘），因为没有发现位置变化，不进行渲染。
+- 是否是继承属性(株连性): display:none，display不是继承属性，元素及其子元素都会消失。visibility:hidden，visibility是继承属性，若子元素使用了visibility:visible，则不继承，这个子孙元素又会显现出来。
+
+## em rem vh vw calc(), line-height 百分比
+
+- em: 
+
+em: 相对单位，参考物是元素的font-size，具有继承的特点。如果字体大小是16px（浏览器的默认值），那么 1em = 16px
+
+- rem
+
+rem：相对单位，可理解为”root em”, 相对根节点html的字体大小来计算，不会像em那样，依赖于父元素的字体大小，而造成混乱
+  - 实现原理及相应的计算方案
+      rem布局的本质是等比缩放，一般是基于宽度.
+      需要了解的基础知识：
+      1. 默认浏览器设置的字体大小为16px
+      2. viewport属性 width、height、initial-scale、maximum-scale、minimum-scale、user-scalable这些属性，分别表示宽度、高度、初始缩放比例、最大缩放比例、最小缩放比例、是否允许用户缩放
+      ```HTML
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1.0, user-scalable=no">
+      ```
+      3. dpr, dpr是设备像素比，是css里面1px所能显示的像素点的个数，dpr的值越大，显示的越精细;window.devicePixelRatio获取到当前设备的dpr。
+  - rem实现适配的原理
+    - 核心思想：百分比布局可实现响应式布局，而rem相当于百分比布局。
+    - 实现原理：动态获取当前视口宽度width，除以一个固定的数n，得到rem的值。表达式为rem = width / n。
+    - 通过此方法，rem大小始终为width的n等分。
+  - 计算方案：
+    - 通过dpr设置缩放比，实现布局视口大小
+    ```JS
+    var scale = 1 / devicePixelRatio;  
+    document.querySelector('meta[name="viewport"]').setAttribute('content','initial-scale='+ scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
+    ```
+    - 动态计算html的font-size
+    ```JS
+    // 设置根元素字体大小。此时为宽的100等分
+    document.documentElement.style.fontSize = ocument.documentElement.clientWidth / 100 + 'px';
+    ```
+### 单位换算库
+
+  实际开发过程中，可以使用 `lib-flexible`[8]库，但是如果每次写的时候都要手动去计算有点太过麻烦了，我们可以通过在webpack中配置 `px2rem-loader`[9], 或者 `pxrem-loader`[10]，主要原理就是需要自己配置 px转rem的计算规则，在编辑的时候直接计算转成rem。所以在开发的时候直接按照设计稿的尺寸写px，编译后会直接转化成rem；
+  - [lib-flexible](https://github.com/amfe/article/issues/17): 计算公式 (设计稿元素宽度/设计稿宽度)*10
+  - 设置[viewport](http://www.cnblogs.com/azhai-biubiubiu/p/5305022.html)配合进行缩放,通常在写移动端页面的时候，我们都会设置         viewport，保证页面缩放没有问题，最常见的viewport的meta标签如下：
+  ```html
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  ```
+  至于为什么要加入viewport，我觉得就是因为现在市面上虽然有那么多不同种类不同品牌不同分辨率的手机，但它们的理想viewport宽度归纳起来无非也就 320、360、414、等几种，都是非常接近的，理想宽度的相近也就意味着我们针对某个设备的理想viewport而做出的网站，在其他设备上的表现也不会相差非常多甚至是表现一样的。
 
 # 性能优化题
 

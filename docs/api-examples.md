@@ -29,9 +29,31 @@ const { theme, page, frontmatter } = useData()
 
 <script setup>
 import { useData } from 'vitepress'
+import { useSidebar } from 'vitepress/theme'
+import { VPTeamMembers } from 'vitepress/theme'
+
+const members = [
+  {
+    avatar: 'https://www.github.com/yyx990803.png',
+    name: 'Evan You',
+    title: 'Creator',
+    links: [
+      { icon: 'github', link: 'https://github.com/yyx990803' },
+      { icon: 'twitter', link: 'https://twitter.com/youyuxi' }
+    ]
+  },
+]
+
+const { hasSidebar } = useSidebar()
 
 const { site, theme, page, frontmatter } = useData()
 </script>
+
+  <div v-if="hasSidebar">Only show when sidebar exists</div>
+
+  <VPTeamMembers size="small" :members="members" />
+
+
 
 ## Results
 
@@ -47,3 +69,5 @@ const { site, theme, page, frontmatter } = useData()
 ## More
 
 Check out the documentation for the [full list of runtime APIs](https://vitepress.dev/reference/runtime-api#usedata).
+
+

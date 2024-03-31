@@ -614,7 +614,7 @@ console.log(obj1.b.f === obj2.b.f); // false
 在JavaScript中，Map和Set是两种不同的数据结构，它们有以下区别：
 
 - 存储的数据类型：`Map可以存储键值对`（key-value pair），而`Set只能存储唯一的值`，不允许重复。
-- 键的类型：`Map的键可以是任意数据类型`，包括基本数据类型和引用数据类型，而`Set只能存储引用数据类型`。
+- 键的类型：`Map的键可以是任意数据类型`，包括基本数据类型和引用数据类型，`Set 可以存储任意类型的值`，包括基本数据类型和引用数据类型。
 - 迭代顺序：`Map会按照插入的顺序保持键值对的迭代顺序`，而`Set不保证迭代顺序与插入顺序一致`。
 - 键的唯一性：`Map中的键是唯一的`，不会出现重复的键，而`Set中的值也是唯一的`，不会出现重复的值。
 - 大小和性能：`Map可以通过size属性获取键值对的数量`，而`Set可以通过size属性获取值的数量`。在大规模数据操作时，Map的性能比Set略低。
@@ -812,6 +812,8 @@ map.forEach((value,key,map)=>
 
 从中我们可以看出`Map对象可以使用任何对象作为键`，这就解决了我们实际应用中一个很大的痛点，比如现在一个DOM对象作为键时，Object就不是那么好用了。
 
+![picture](./assets/img/36.png)
+
 ### WeakMap
 
 与`集合类型（Set）`一样，映射类型也有一个Weak版本的`WeakMap`。WeakMap和WeakSet很相似，只不过`WeakMap的键会检查变量的引用`，`只要其中任意一个引用被释放，该键值对就会被删除`。
@@ -978,28 +980,16 @@ console.log(weakset.has(foo)); //output false
 
 ```
 
+## 18 了解v8引擎是如何运行js
+
+> javascript是运行时编译（jit）：javascript(parser解析器)ast抽象语法书（interpreter解释器）bytecode字节码（compiler编译器）机器代码
+
+**chrome的js引擎是v8、nodejs的运行时环境是v8引擎、electron的底层引擎也是v8**
+
+>v8是用c++编写的google开元高性能javascript和WebAssembly引擎，它用于chrome和nodejs等。实现了ECMAScript和WebAssembly,并在wendows7或更高版本，macOS10.12+和使用x64，IA-32,ARM或MIPS处理器的linux系统上运行。
+人话就是v8是一个接收javascript代码，编译代码然后执行的c++程序，编译后的代码可以在多种操作系统、多种处理器上运行。
 
 
-## 18. 多维数组平铺几种方法
 
-①
-```javascript
-<script>
 
-let arr = [1, [2, [3, 4, 5], 6]];
-function flatten(arr, crr) {
-    //arr.flat(10)
-    let brr = crr || []
-    for(let i = 0; i < arr.length; i++){
-        if(arr[i] instanceof Array){
-            brr.concat(...flatten(arr[i], brr))
-        }else{
-            brr.push(arr[i])
-        }
-    }
-    return brr
-}
-console.log(flatten(arr, []));  //  [1, 2, 3, 4, 5, 6]
-</script>
-```
 

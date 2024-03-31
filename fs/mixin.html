@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div>{{msg}}</div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+<script>
+    let mixin = {
+        data(){
+            msg: 'hello me'
+        },
+        created(){
+            console.log(this.msg)
+        },
+        methods: {
+            hello(){
+                console.log('hello mixin')
+            },
+            setHello(){
+                this.msg = 'hello xmm'
+            }
+        }
+    }
+    let vm = new Vue({
+        mixins: [mixin],
+        data(){
+            return {
+                msg: 'hello world'
+            }
+        },
+        created(){
+            console.log(this.msg)
+        },
+        methods: {
+            hello(){
+                this.setHello()
+                console.log(this.msg)
+            }
+        }
+    }).$mount('#app')
+    vm.hello()
+</script>
+</html>

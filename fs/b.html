@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="model"></div>
+    <button id="btn">点击填充</button>
+</body>
+</html>
+<script>
+// 三个状态：PENDING、FULFILLED、REJECTED
+const PROMISE_STATUS_PENDING = 'pending'
+const PROMISE_STATUS_FULFILLED = 'fulfilled'
+const PROMISE_STATUS_REJECTED = 'rejected'
+
+class Promise {
+    constructor(excetor){
+        // 默认状态为 PENDING
+        this.status = PROMISE_STATUS_PENDING
+        // 存放成功状态的值，默认为 undefined
+        this.value = undefined
+        // 存放失败状态的值，默认为 undefined
+        this.reason = undefined
+        // 存放成功的回调
+        this.onFulfilledFns = []
+        // 存放失败的回调
+        this.onRejectedFns = []
+
+        // 调用此方法就是成功
+        let resolve  = value => {
+            //状态为pending时状态才可以更新，防止excetor中调用了两次 resolve/reject 方法？
+            if(this.status === PROMISE_STATUS_PENDING){
+                this.status = PROMISE_STATUS_FULFILLED
+                this.value = value
+                // 依次将对应的函数执行
+                this.onFulfilledFns.forEach(fn => fn())
+            }
+        }
+
+        //调用此方法就是失败
+        let reject = reason => {
+            //状态为pending时状态才可以更新，防止excetor中调用了两次 resolve/reject 方法？
+            if(this.status === PROMISE_STATUS_PENDING){
+                this.staus = PROMISE_STATUS_REJECTED
+                this.reason = reason
+                // 依次将对应的函数执行
+                this.onRejectedFns.forEach(fn => fn())
+            }
+        }
+
+        try {
+            excetor(resolve, reject)
+        } catch(error) {
+            reject(error)
+        }
+    }
+
+    then(onFulfilled, onRejected){
+        if(this.status === PROMISE_STATUS_FULFILLED){
+            onFulfilled(this.value)
+        }
+
+        if(this.status === PROMISE_STATUS_REJECTED){
+            onRejected(this.reason)
+        }
+
+        if(this.status === PROMISE_STATUS_PENDING){
+            // 如果promise的状态是 pending，需要将 onFulfilled 和 onRejected 函数存放起来，等待状态确定后，再依次将对应的函数执行
+            this.onFulfilledFns.push(() => onFulfilled(this.value))
+
+            // 如果promise的状态是 pending，需要将 onFulfilled 和 onRejected 函数存放起来，等待状态确定后，再依次将对应的函数执行
+            this.onRejectedFns.push(() => onRejected(this.reason))
+        }
+    }
+}
+    
+const promise = new Promise((resolve, reject) => {
+  // 传入一个异步操作
+  setTimeout(() => {
+    resolve('成功');
+  },1000);
+}).then(
+  (data) => {
+    console.log('success', data)
+  },
+  (err) => {
+    console.log('faild', err)
+  }
+)
+
+// vue2 简易响应性getter&setter
+var obj = {
+    counter: 1
+}
+function convert(obj){
+    Object.keys(obj).forEach(key => {
+        let initlValue = obj[key]
+        Object.defineProperty(obj, key, {
+            get(){
+                console.log(`triggrt getter value :: >> ${initlValue}`)
+                return initlValue
+            },
+            set(newValue){
+                console.log(`triggrt setter value :: >> ${newValue}`)
+                obj[key] = newValue
+            }
+        })
+    })
+}
+convert(obj)
+
+window.onload = function(){
+    function modelHtml(){
+        document.querySelector('.model').textContent = obj.counter
+    }
+
+    document.querySelector('#btn').addEventListener('click', function(){
+        ++obj.counter
+        modelHtml()
+    })
+}
+
+let activeUpdated = null
+
+function autorun(update){
+    function wrappedUpdate(){
+        activeUpdated = wrappedUpdate
+        update()
+        activeUpdated = null
+    }
+    wrappedUpdate()
+}
+
+autorun(() => {
+
+})
+
+</script>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+<script>
+    let pathToRegexp = require('path-to-regexp')
+    let reg = pathToRegexp('/user/:name')
+    let res = reg.match('/user/123')
+    console.log(res)
+    const Foo = {
+        template: '<div>foo</div>'
+    }
+    const Bar = {
+        template: '<div>bar</div>'
+    }
+    const notFound = {
+        template: '<div>notfound</div>'
+    }
+    const routeTable = {
+        foo: Foo,
+        bar: Bar,
+    }
+    window.addEventListener('hashchange', function(){
+        app.url = window.location.hash.slice(1)
+    })
+    let app = new Vue({
+        el: "#app",
+        data(){
+            return {
+                url: window.location.hash.slice(1)
+            }
+        },
+        render(h){
+            return h('div', [
+                h(routeTable[this.url] || notFound),
+                h('a', { attrs: {href: '#foo' } }, 'foo'),
+                h(''),
+                h('a', { attrs: {href: '#bar' } }, 'bar')
+            ])
+        }
+    })
+</script>
+</html>

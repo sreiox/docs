@@ -6,14 +6,11 @@
 function deepClone(obj){
     if(typeof obj !== 'object' || typeof obj === null) return obj;
 
-    const result = obj instanceof Array? []: {}
+    if(obj instanceof RegExp) return obj;
+    if(obj instanceof Date) return obj;
+    var cloneObj = obj instanceof Array? []: {};
 
-    for(let key in obj){
-
-        result[key] = deepClone(obj[key])
-        //浅拷贝 resutl[key] = obj[key]
-    } 
-    return result;
+    for(i in obj){ cloneObj[i] = deepClone(obj[i])}; return cloneObj;
 }
 
 const obj = {a: 1, b: {c:3}, d: 5}
@@ -196,6 +193,38 @@ const p = newFn(person, 'john')
 console.log(p.name)
 ```
 
+## 手写一个instanceof
+
+```JS
+function myInstanceof(left, right) {
+
+  // 这里先用typeof来判断基础数据类型，如果是，直接返回false
+
+  if(typeof left !== 'object' || left === null) return false;
+
+  // getProtypeOf是Object对象自带的API，能够拿到参数的原型对象
+
+  let proto = Object.getPrototypeOf(left);
+
+  while(true) {                  //循环往下寻找，直到找到相同的原型对象
+
+    if(proto === null) return false;
+
+    if(proto === right.prototype) return true;//找到相同原型对象，返回true
+
+    proto = Object.getPrototypeof(proto);
+
+    }
+
+}
+
+// 验证一下自己实现的myInstanceof是否OK
+
+console.log(myInstanceof(new Number(123), Number));    // true
+
+console.log(myInstanceof(123, Number));                // false
+```
+
 ## [手写Promise](https://juejin.cn/post/6850037281206566919#heading-6)
 
 我们先来回顾下最简单的 Promise 使用方式：
@@ -257,7 +286,7 @@ const PROMISE_STATUS_FULFILLED = 'fulfilled'
 const PROMISE_STATUS_REJECTED = 'rejected'
 
 class Promise {
-    constructor(exector){
+    constructor(excetor){
         // 默认状态为 PENDING
         this.status = PROMISE_STATUS_PENDING
         // 存放成功状态的值，默认为 undefined
@@ -352,7 +381,7 @@ const PROMISE_STATUS_FULFILLED = 'fulfilled'
 const PROMISE_STATUS_REJECTED = 'rejected'
 
 class Promise {
-    constructor(exector){
+    constructor(excetor){
         // 默认状态为 PENDING
         this.status = PROMISE_STATUS_PENDING
         // 存放成功状态的值，默认为 undefined
@@ -482,7 +511,7 @@ const resolvePromise = (promise2, x, resolve, reject) => {
 }
 
 class Promise {
-    constructor(exector){
+    constructor(excetor){
         // 默认状态为 PENDING
         this.status = PROMISE_STATUS_PENDING
         // 存放成功状态的值，默认为 undefined
@@ -585,3 +614,122 @@ class Promise {
     }
 }
 ```
+
+## 多维数组平铺几种方法
+
+①
+```javascript
+<script>
+
+let arr = [1, [2, [3, 4, 5], 6]];
+function flatten(arr, crr) {
+    //arr.flat(10)
+    let brr = crr || []
+    for(let i = 0; i < arr.length; i++){
+        if(arr[i] instanceof Array){
+            brr.concat(...flatten(arr[i], brr))
+        }else{
+            brr.push(arr[i])
+        }
+    }
+    return brr
+}
+console.log(flatten(arr, []));  //  [1, 2, 3, 4, 5, 6]
+</script>
+```
+
+## Vue自定义指令懒加载
+
+[MDN参考](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#a_simple_example)
+
+```js
+<script setup lang="ts">
+
+
+const vLazy = {
+    mounted: function(el: Element){
+        if(IntersectionObserver){
+            const lazyObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    const lazyImg = entry.target
+                    if(entry.intersectionRatio > 0){
+                        lazyImg.src = lazyImg.alt
+                        lazyImageObserver.unobserve()
+                    }
+                })
+            })
+            lazyObserver.observe(el)
+        }
+    }
+}
+
+
+</script>
+
+<template>
+    <div class="img-wrapper" ref="img">
+        <img v-lazy ref="imgEle" class="PkIXX5No" alt="https://st0.dancf.com/market-operations/market/side/1711364899920.png?x-oss-process=image/resize,w_260/sharpen,80/interlace,1,image/format,webp" >
+        <img v-lazy ref="imgEle" class="PkIXX5No" alt="https://st0.dancf.com/market-operations/market/side/1711366275399.png?x-oss-process=image/resize,w_260/sharpen,80/interlace,1,image/format,webp" >
+        <img v-lazy src="" alt="https://st0.dancf.com/market-operations/market/side/1711364958173.png?x-oss-process=image/resize,w_260/sharpen,80/interlace,1,image/format,webp">
+        <img v-lazy src="" alt="https://st0.dancf.com/market-operations/market/side/1711365160135.png?x-oss-process=image/resize,w_260/sharpen,80/interlace,1,image/format,webp">
+        <img v-lazy src="" alt="https://st0.dancf.com/market-operations/market/side/1711365160135.png?x-oss-process=image/resize,w_260/sharpen,80/interlace,1,image/format,webp" srcset="">
+    </div>
+</template>
+<style scoped>
+.img-wrapper{
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+.img-wrapper img{
+    width: 300px;
+    height: 400px;
+    display: block;
+}
+</style>
+```
+
+
+也可以监听scrolltop值判断是否进入视口？但是有什么缺点呢？自己想。。。
+
+## 统计HTML标签中以b开头的标签数量
+
+```js
+const ele = document.getElementsByTagName('*')
+const value = [...ele].filter(item => item.tagName.startWith('b'))
+```
+
+## 统计HTML标签中出现次数最多的标签
+
+```js
+const tags = document.getElementsByTagName('*');
+let map = new Map();
+let maxStr = '';
+let max = 0;
+// 只是使用下标来获取，没有使用数组的方法，所以不需要将类数组转为数组
+for(let i = 0; i < tags.length; i++) {
+    let value = map.get(tags[i].tagName)
+    if(value) {
+        map.set(tags[i].tagName, ++value)
+    } else {
+        map.set(tags[i].tagName, 1);
+    }
+    if(value > max) {
+        maxStr = tags[i].tagName;
+        max = value;
+    }
+}
+console.log(`当前最多的标签为 ${maxStr}，个数为 ${max}` );
+
+```
+## 替换日期格式，xxxx-yy-zz 替换成 xxx-zz-yy可以使用 正则的捕获组来实现
+
+```js
+var date = '10.24/2017'
+var reg = /(\d{2})\.(\d{2})\/(\d{4})/
+date = date.replace(reg, `$3-$1-$2`)
+```
+
+或者用split
+
+## ​简单实现一个Virtual DOM​

@@ -440,7 +440,7 @@ promise
 ```javascript
 "then: success1"
 ```
-#### 3.2 题目二
+#### <font color='red'>3.2* 题目二</font>
 ```javascript
 <script>
 const promise = new Promise((resolve, reject) => {
@@ -863,7 +863,7 @@ Promise.all([runAsync(1), runAsync(2), runAsync(3)])
 
 >有一个场景是很适合用这个的，一些游戏类的素材比较多的应用，打开网页时，预先加载需要用到的各种资源如图片、flash以及各种静态文件。所有的都加载完后，我们再进行页面的初始化。
 
-#### 4.2 题目二
+#### <font color='red'>4.2* 题目二</font>
 我新增了一个runReject函数，它用来在1000 *   
 
 同时`.catch()`函数能够捕获到`.all()`里最先的那个异常，并且只执行一次。  
@@ -1340,7 +1340,7 @@ async1().then(res => console.log(res))
 'async1'
 Uncaught (in promise) Error: error!!!
 ```
-#### 6.2 题目二
+#### <font color='red'>6.2* 题目二</font>
 
 如果想要使得错误的地方不影响`async`函数后续的执行的话，可以使用`try catch`
 
@@ -1698,6 +1698,16 @@ const step = function () {
 
 step();
 ```
+::: danger
+[return](https://juejin.cn/post/6879692911680684040)
+注意，如果没有return,这里的promise会成为一个副作用，然后把undefined传递给后续的then, then并不会等待这个promise
+只有当onFulfilled的返回值是一个Promise时，后续then才会等该promise状态变化后才执行
+所以写then时保持有return或者throw的好习惯
+
+- return 另一个promise
+- return 一个同步的值或者undefined
+- throw一个异常
+:::
 
 #### 8.3 实现mergePromise函数
 

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+<script>
+    function app({el, model, actions, view} ){
+        let wrappedActions = {}
+        Object.keys(actions).forEach(key => {
+            let originalAction = actions[key]
+            wrappedActions[key] = () => {
+                let nextModel = originalAction(vm.model)
+                vm.model = nextModel
+            }
+        })
+        let vm = new Vue({
+            el,
+            data:{
+                model
+            },
+            render(h) {
+                return view(h, this.model, wrappedActions)
+            }
+        })
+    }
+    // app({
+    //     el: "#app",
+    //     model: {
+    //         count: 0
+    //     },
+    //     actions: {
+    //         inc: ({count}) => ({ count: count+1 }),
+    //         dec: ({count}) => ({ count: count-1 }),
+    //     },
+    //     view(h, model, mutations){
+    //         return h('div', {attrs: {id: 'app'}},[
+    //             model.count,
+    //             h('button', { on: {click: mutations.inc} }, '+'),
+    //             h('button', { on: {click: mutations.dec} }, '-')
+    //         ])
+    //     }
+    // })
+
+    function createStore({state, mutations}){
+        return new Vue({
+            data: {
+                state
+            },
+            methods: {
+                commit(type){
+                    mutations[type](this.state)
+                }
+            }
+        })
+    }
+
+    let store = createStore({
+        state: {
+            count: 0
+        },
+        mutations: {
+            inc(state){
+                state.count++
+            }
+        }
+    })
+
+    new Vue({
+        el: '#app',
+        methods: {
+            inc(){
+                store.commit('inc')
+            }
+        },
+        render(h){
+            return h('div', {attrs: {id: 'app'}},[
+                store.state.count,
+                h('button', { on: {click: this.inc} }, '+'),
+                // h('button', { on: {click: mutations.dec} }, '-')
+            ])
+        }
+    })
+
+</script>
+</html>

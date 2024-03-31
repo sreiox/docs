@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GET 请求示例</title>
+<script src="
+https://cdn.jsdelivr.net/npm/lib-flexible@0.3.2/flexible.min.js
+"></script>
+<script>
+    function makeRequest() {
+        var httpRequest = new XMLHttpRequest();
+
+        if (!httpRequest) {
+            alert('无法创建XMLHTTP实例！');
+            return false;
+        }
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                if (httpRequest.status === 200) {
+                    document.getElementById('response').innerHTML = httpRequest.responseText;
+                } else {
+                    alert('请求失败：' + httpRequest.status);
+                }
+            }
+        };
+        httpRequest.open('GET', 'http://192.168.124.6:3000', true);
+        httpRequest.send();
+    }
+</script>
+</head>
+<body>
+<h2>GET 请求示例</h2>
+<button type="button" onclick="makeRequest()">发起请求</button>
+<div id="response"></div>
+<iframe src="http://127.0.0.1:5501/test.html" frameborder="0"></iframe>
+<div class="flex">
+    <div class="flex-item">一样一样一月又一月呀呀</div>
+    <div class="flex-item">反反复复凤飞飞反反复复发发发发发发发发发发发发发发发</div>
+    <div class="flex-item">发发发发发</div>
+</div>
+<div class="padding-height">
+    <div></div>
+</div>
+</body>
+<script>
+    window.onload = function(){
+     
+    }
+       // 获取 iframe 元素
+       var iframe = document.querySelectorAll('iframe')[0];
+    console.log(iframe)
+// 确保 iframe 已经加载完毕
+iframe.onload = function() {
+    console.log('发了')
+  // 向 iframe 发送消息，包含要设置的样式信息
+  iframe.contentWindow.postMessage('red', '*'); // '*' 表示发送消息给所有源
+};
+</script>
+</html>
+<style>
+    .flex{
+        width: 600px;
+        height: 200px;
+        background-color: aquamarine;
+        display: flex;
+    }
+    .flex-item{
+        
+    }
+</style>

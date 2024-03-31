@@ -1,4 +1,4 @@
-# vue
+# [vue](https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js)
 
 ## 1. 虚拟DOM
 
@@ -6,12 +6,12 @@
 
 虚拟DOM（Virtual DOM）是一种在Web开发中常用的概念。它是基于JavaScript对象的表示，用于描述真实DOM（Document Object Model）的层次结构和状态。
 
-在传统的Web开发中，直接操作真实DOM是比较昂贵的操作，因为每次更新都需要重新计算布局和重新渲染。而虚拟DOM的思想是，通过创建一个轻量级的JavaScript对象树来模拟真实DOM的结构和状态。在组件或数据发生变化时，先对虚拟DOM进行操作和计算，`通过diff算法来计算出最小的变更`，然后将变化应用到真实DOM上，通过对应的渲染器，来渲染到页面上。这样可以减少对真实DOM的直接操作，提高性能和效率。
+在传统的Web开发中，直接操作真实DOM是比较昂贵的操作，因为每次更新都需要重新计算布局和重新渲染。而虚拟DOM的思想是，`通过创建一个轻量级的JavaScript对象树来模拟真实DOM的结构和状态。在组件或数据发生变化时，先对虚拟DOM进行操作和计算，通过diff算法来计算出最小的变更，然后将变化应用到真实DOM上，通过对应的渲染器，来渲染到页面上。这样可以减少对真实DOM的直接操作，提高性能和效率。`
 
 
 同时`虚拟DOM`也为跨平台开发提供了极大的便利，开发者写的同一套代码（有些需要针对不同平台做区分），通过不同的渲染规则，就可以生成不同平台的代码。
 
-在`vue`中会通过`渲染器`来将虚拟DOM转换为对应平台的真实DOM。如`renderer(vnode， container)`，该方法会根据`vnode`描述的信息（如tag、props、children）来创建DOM元素，根据规则为对应的元素添加属性和事件，`处理vnode下的children`。
+`在vue中会通过渲染器来将虚拟DOM转换为对应平台的真实DOM。如renderer(vnode， container)，该方法会根据vnode描述的信息（如tag、props、children）来创建DOM元素，根据规则为对应的元素添加属性和事件，处理vnode下的children。`
 
 虚拟DOM的工作流程一般包括以下几个步骤：
 1. `初始化`：将真实DOM的结构和状态转化为虚拟DOM的JavaScript对象表示。
@@ -189,5 +189,14 @@ function proxyRefs(target) {
 - 代码方便复用，可以把一个功能所有的 methods、data 封装在一个独立的函数里，复用代码非常容易。
 - Composotion API新增的return 等语句， 在实际项目中使用（啥意思?）
 
+## 7. vue会发生双向数据绑定的方法
+
+'push',
+'pop',
+'shift',
+'unshift',
+'splice',
+'sort',
+'reverse'
 
 
