@@ -199,4 +199,6 @@ function proxyRefs(target) {
 'sort',
 'reverse'
 
+## vue2和vue3实现双向数据绑定的区别是什么?分别用proxy和definproperty写一个简单的双向数据绑定，proxy除了拦截之外还可以作甚？
 
+[链接](https://cloud.tencent.com/developer/article/2369531)

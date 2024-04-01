@@ -989,6 +989,42 @@ console.log(weakset.has(foo)); //output false
 >v8是用c++编写的google开元高性能javascript和WebAssembly引擎，它用于chrome和nodejs等。实现了ECMAScript和WebAssembly,并在wendows7或更高版本，macOS10.12+和使用x64，IA-32,ARM或MIPS处理器的linux系统上运行。
 人话就是v8是一个接收javascript代码，编译代码然后执行的c++程序，编译后的代码可以在多种操作系统、多种处理器上运行。
 
+## 19 如何判断浏览器是否支持webp格式
+
+```js
+function checkWebPSupport(callback) {
+    var img = new Image();
+    img.onload = function() {
+        callback(true);
+    };
+    img.onerror = function() {
+        callback(false);
+    };
+    img.src = 'data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA';
+}
+
+// 使用示例
+checkWebPSupport(function(supported) {
+    if (supported) {
+        console.log('浏览器支持 WebP');
+    } else {
+        console.log('浏览器不支持 WebP');
+    }
+});
+
+```
+
+## 说说你对同步阻塞、异步非阻塞的理解
+
+## 安全相关，xss的反射型是什么，怎么避免
+
+[xss](https://mp.weixin.qq.com/s?__biz=MzI0MzU5Nzg0Ng==&mid=2247484002&idx=1&sn=5b6e9d074807af65d0e1ce6f0813483c&chksm=e96bd51bde1c5c0d5be5a1670913033d576d36779857532d9fa6223675b0ec436165fda90577&scene=21#wechat_redirect)
+[csrf](https://mp.weixin.qq.com/s?__biz=MzI0MzU5Nzg0Ng==&mid=2247484020&idx=1&sn=528bcdcf596e09c4c726230cc54525bd&chksm=e96bd50dde1c5c1b1aab035911453d1bf22ed19b32d35a499e3b6271ff89d4c12ff9d31529ee&scene=21#wechat_redirect)
+
+## 首屏加载优化，通过哪些指标去衡量？
+
+可以通过查看控制台的perfromance信息，包括dns解析、tcp握手时间、内容加载时间、load时间等等去分析耗时
+
 
 
 

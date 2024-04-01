@@ -138,4 +138,17 @@ autorun(() => {
 
 })
 
+function quchong(obj){
+    var set = new Set(), arr = []
+    for(let i = 0; i < obj.length; i++){
+        let str = JSON.stringify(obj[i])
+        if(set.has(str)){
+            continue
+        }else{
+            set.add(str)
+            arr.push(obj[i])
+        }
+    } return arr
+}
+
 </script>
